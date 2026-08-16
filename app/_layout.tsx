@@ -1,24 +1,41 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import * as SystemUI from 'expo-system-ui';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { themes } from '@/constants/theme';
+import { ThemeProvider, useThemeMode } from '@/hooks/use-theme';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+function RootNavigator() {
+  const mode = useThemeMode();
+  const theme = themes[mode];
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(theme.background).catch(() => {
+      // Ignore: setting the root background is best-effort.
+    });
+  }, [theme.background]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    <SafeAreaProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: theme.background },
+        }}
+      >
+        <Stack.Screen name="index" />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+    </SafeAreaProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <RootNavigator />
     </ThemeProvider>
   );
 }
