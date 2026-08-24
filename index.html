@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Calculator</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app-backdrop"></div>
+
+  <main class="calculator" id="calculator">
+
+    <!-- Header -->
+    <header class="calc-header">
+      <button class="icon-btn" id="menuBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </button>
+
+      <div class="header-right">
+        <button class="icon-btn" id="sciToggleBtn" aria-label="Scientific mode" title="Scientific mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3v6.5L4.5 18a1.8 1.8 0 0 0 1.6 2.6h11.8a1.8 1.8 0 0 0 1.6-2.6L15 9.5V3"></path>
+            <line x1="9" y1="3" x2="15" y2="3"></line>
+            <line x1="7" y1="14" x2="17" y2="14"></line>
+          </svg>
+        </button>
+        <button class="icon-btn" id="modeBtn" aria-label="Toggle theme" title="Theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" id="themeIcon">
+            <circle cx="12" cy="12" r="4.5"></circle>
+            <line x1="12" y1="2" x2="12" y2="4.2"></line>
+            <line x1="12" y1="19.8" x2="12" y2="22"></line>
+            <line x1="2" y1="12" x2="4.2" y2="12"></line>
+            <line x1="19.8" y1="12" x2="22" y2="12"></line>
+            <line x1="4.9" y1="4.9" x2="6.4" y2="6.4"></line>
+            <line x1="17.6" y1="17.6" x2="19.1" y2="19.1"></line>
+            <line x1="4.9" y1="19.1" x2="6.4" y2="17.6"></line>
+            <line x1="17.6" y1="6.4" x2="19.1" y2="4.9"></line>
+          </svg>
+        </button>
+        <button class="icon-btn" id="historyBtn" aria-label="History" title="History">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.5"></circle>
+            <polyline points="12 7.5 12 12 15.5 14"></polyline>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Menu dropdown -->
+    <div class="menu-panel" id="menuPanel">
+      <button class="menu-item" data-action="copy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 0 1 2-2h9"></path></svg>
+        Copy result
+      </button>
+      <button class="menu-item" data-action="share">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="19" r="2.6"></circle><line x1="8.3" y1="10.7" x2="15.7" y2="6.3"></line><line x1="8.3" y1="13.3" x2="15.7" y2="17.7"></line></svg>
+        Share result
+      </button>
+      <div class="menu-divider"></div>
+      <div class="menu-label">Angle unit</div>
+      <div class="angle-switch" id="angleSwitch">
+        <button class="angle-opt active" data-angle="DEG">DEG</button>
+        <button class="angle-opt" data-angle="RAD">RAD</button>
+        <button class="angle-opt" data-angle="GRAD">GRAD</button>
+      </div>
+    </div>
+
+    <!-- Display -->
+    <section class="display" id="displaySection">
+      <div class="memory-badge" id="memoryBadge">M</div>
+      <div class="expression" id="expression"></div>
+      <div class="result" id="result">0</div>
+    </section>
+
+    <!-- Scientific panel -->
+    <section class="sci-panel" id="sciPanel">
+      <div class="sci-row">
+        <button class="btn sci" data-val="sin(">sin</button>
+        <button class="btn sci" data-val="cos(">cos</button>
+        <button class="btn sci" data-val="tan(">tan</button>
+        <button class="btn sci" data-action="deg-cycle" id="degCycleBtn">DEG</button>
+        <button class="btn sci" data-action="paren-open">(</button>
+        <button class="btn sci" data-action="paren-close">)</button>
+      </div>
+      <div class="sci-row">
+        <button class="btn sci" data-val="asin(">sin⁻¹</button>
+        <button class="btn sci" data-val="acos(">cos⁻¹</button>
+        <button class="btn sci" data-val="atan(">tan⁻¹</button>
+        <button class="btn sci" data-action="postfix" data-op="!">x!</button>
+        <button class="btn sci" data-action="postfix" data-op="⁻¹">1/x</button>
+        <button class="btn sci" data-action="postfix" data-op="%">%²</button>
+      </div>
+      <div class="sci-row">
+        <button class="btn sci" data-val="log(">log</button>
+        <button class="btn sci" data-val="ln(">ln</button>
+        <button class="btn sci" data-val="√(">√</button>
+        <button class="btn sci" data-action="postfix" data-op="²">x²</button>
+        <button class="btn sci" data-action="postfix" data-op="³">x³</button>
+        <button class="btn sci" data-op="^">xʸ</button>
+      </div>
+      <div class="sci-row">
+        <button class="btn sci" data-val="π">π</button>
+        <button class="btn sci" data-val="e">e</button>
+        <button class="btn sci" data-op="nCr">nCr</button>
+        <button class="btn sci" data-op="nPr">nPr</button>
+        <button class="btn sci" data-val="10^(">10ˣ</button>
+        <button class="btn sci" data-action="rand">rnd</button>
+      </div>
+    </section>
+
+    <!-- Memory row -->
+    <section class="memory-row">
+      <button class="mem-btn" data-action="mc">MC</button>
+      <button class="mem-btn" data-action="mr">MR</button>
+      <button class="mem-btn" data-action="m-plus">M+</button>
+      <button class="mem-btn" data-action="m-minus">M−</button>
+      <button class="mem-btn" data-action="ms">MS</button>
+    </section>
+
+    <!-- Keypad -->
+    <section class="keypad">
+      <div class="row">
+        <button class="btn func" data-action="clear">C</button>
+        <button class="btn func" data-op="%">%</button>
+        <button class="btn func" data-op="÷">÷</button>
+        <button class="btn func" data-action="backspace" aria-label="Backspace">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 6h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 18H9l-5.2-5.4a.9.9 0 0 1 0-1.2Z"></path><line x1="13.2" y1="9.5" x2="17.5" y2="14.2"></line><line x1="17.5" y1="9.5" x2="13.2" y2="14.2"></line></svg>
+        </button>
+      </div>
+      <div class="row">
+        <button class="btn num" data-num="7">7</button>
+        <button class="btn num" data-num="8">8</button>
+        <button class="btn num" data-num="9">9</button>
+        <button class="btn op" data-op="×">×</button>
+      </div>
+      <div class="row">
+        <button class="btn num" data-num="4">4</button>
+        <button class="btn num" data-num="5">5</button>
+        <button class="btn num" data-num="6">6</button>
+        <button class="btn op" data-op="−">−</button>
+      </div>
+      <div class="row">
+        <button class="btn num" data-num="1">1</button>
+        <button class="btn num" data-num="2">2</button>
+        <button class="btn num" data-num="3">3</button>
+        <button class="btn op" data-op="+">+</button>
+      </div>
+      <div class="row">
+        <button class="btn func small" data-action="toggle-sign">±</button>
+        <button class="btn num" data-num="0">0</button>
+        <button class="btn num" data-num=".">.</button>
+        <button class="btn equals" data-action="equals">=</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- History panel -->
+  <div class="history-overlay" id="historyOverlay"></div>
+  <aside class="history-panel" id="historyPanel">
+    <div class="history-header">
+      <span>Calculation History</span>
+      <button class="icon-btn" id="closeHistoryBtn" aria-label="Close history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+      </button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty" id="historyEmpty">No calculations yet</div>
+    </div>
+    <div class="history-footer">
+      <button class="clear-history-btn" id="clearHistoryBtn">Clear History</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
